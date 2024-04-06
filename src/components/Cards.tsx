@@ -8,9 +8,9 @@ import React, { cache, useEffect } from "react";
 interface Props {
   cervezas: Cerveza[];
   setCervezas: React.Dispatch<React.SetStateAction<Cerveza[]>>;
-  setActualizaPaginas: React.Dispatch<React.SetStateAction<boolean>>;
+  
 }
-const Cards = ({ cervezas, setCervezas, setActualizaPaginas }: Props) => {
+const Cards = ({ cervezas, setCervezas}: Props) => {
   
 
   const BorrarCerveza = async (id: number) => {
@@ -31,7 +31,7 @@ const Cards = ({ cervezas, setCervezas, setActualizaPaginas }: Props) => {
         alert("Su sesión ha caducado");
       }
       setCervezas(cervezas.filter((e) => e.id !== id));
-      setActualizaPaginas(true);
+    //  setActualizaPaginas(true);
     } catch (error) {
       alert(error);
     }

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import Load from "@/components/Load";
-import { useRouter } from "next/navigation";
 
 import {
   fetchCervezas,
@@ -24,15 +23,12 @@ import {
 import Link from "next/link";
 import Cards from "@/components/Cards";
 
-export default function Page () {
+export default function Page() {
   //Paginación
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(40);
- 
-  const router = useRouter();
 
-  const [actualizaPaginas, setActualizaPaginas] = useState<boolean>(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [cervezas, setCervezas] = useState<Cerveza[]>([]);
   const [tipos, setTipos] = useState<Tipo[]>([]);
   const [paises, setPaises] = useState<PaisesData | undefined>(undefined);
@@ -48,7 +44,6 @@ export default function Page () {
     novedad: -1,
   });
 
-  
   const handleOnChange = (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => {
@@ -90,8 +85,6 @@ export default function Page () {
 
     const cervezas = await fetchCervezasQuery(queryString);
     setCervezas(cervezas.data);
-
-   
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -105,18 +98,12 @@ export default function Page () {
     }
 
     await CervezasQuery(queryString);
-    // Puedes hacer algo con el queryString, como enviarlo a un servidor o realizar otras operaciones
   };
 
   useEffect(() => {
     const obtenerCervezas = async () => {
       setLoading(true);
       try {
-        const cervezasData = await fetchCervezas();
-
-        setCervezas(cervezasData.data);
-       
-
         const tiposData = await fetchTipos();
         setTipos(tiposData.data);
 
@@ -131,36 +118,17 @@ export default function Page () {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
+      const cervezasData = await fetchCervezas();
+      setCervezas(cervezasData.data);
       setLoading(false);
     };
 
     obtenerCervezas();
   }, []);
 
-  useEffect(() => {
-    if (actualizaPaginas) {
-      const ObtenerDatos = async () => {
-        const queryString = `page=${page}&per_page=${limit}&tipo_id=${formData.tipo}&pais_id=${formData.pais}&color_id=${formData.color}&graduacion_id=${formData.graduacion}`;
-
-        await CervezasQuery(queryString);
-      };
-      ObtenerDatos();
-      setActualizaPaginas(false);
-    }
-  }, [actualizaPaginas]);
-
-  useEffect(() => {
-    const ObtenerDatos = async () => {
-      const queryString = `page=${page}&per_page=${limit}&tipo_id=${formData.tipo}&pais_id=${formData.pais}&color_id=${formData.color}&graduacion_id=${formData.graduacion}`;
-
-      await CervezasQuery(queryString);
-    };
-    ObtenerDatos();
-  }, [page]);
-
   return (
     <div>
-      <h1 className="text-2xl font-bold text-center">Cervezas</h1>
+      <h1 className="text-2xl font-bold text-center mt-5">Cervezas</h1>
       <div className="w-11/12 mx-auto border-2 p-4 rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold text-center">Filtro</h1>
 
@@ -329,19 +297,9 @@ export default function Page () {
         )}
 
        
-        
-        {loading ? (
-          <Load />
-        ) : (
-          <Cards
-            cervezas={cervezas}
-            setCervezas={setCervezas}
-            setActualizaPaginas={setActualizaPaginas}
-          />
-        )}
+          <Cards cervezas={cervezas} setCervezas={setCervezas} />
+       
       </div>
     </div>
   );
-};
-
-
+}
