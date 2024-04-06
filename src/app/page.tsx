@@ -27,10 +27,8 @@ import Cards from "@/components/Cards";
 export default function Page () {
   //Paginación
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(12);
-  const [totalPages, setTotalPages] = useState(0);
-  const [totalRecords, setTotalRecords] = useState(0);
-
+  const [limit, setLimit] = useState(40);
+ 
   const router = useRouter();
 
   const [actualizaPaginas, setActualizaPaginas] = useState<boolean>(false);
@@ -50,91 +48,7 @@ export default function Page () {
     novedad: -1,
   });
 
-  const RenderPagination: React.FC = () => {
-    // Define el valor máximo de botones de página a mostrar (en este caso, x)
-    let x: number = 10;
-    if (totalPages > 10) {
-      x = 10;
-    } else {
-      x = totalPages;
-    }
-
-    const pageButtons = [];
-
-    // Genera los botones de página en el rango calculado
-    for (let i = 1; i <= x; i++) {
-      pageButtons.push(
-        <button
-          key={i}
-          className={`flex  justify-center btn-page ${
-            i === page ? "bg-gray-600" : "btn-page"
-          }  hover:bg-gray-800`}
-          onClick={() => setPage(i)}
-        >
-          {i}
-        </button>
-      );
-    }
-
-    const retrocedePagina = () => {
-      if (page > 1) {
-        setPage(page - 1); // Resta 1 para retroceder de página si no estás en la primera página
-      }
-    };
-
-    const primeraPagina = () => {
-      if (page > 1) {
-        setPage(1);
-      }
-    };
-
-    const ultimaPagina = () => {
-      if (page < totalPages) {
-        setPage(totalPages);
-      }
-    };
-
-    const avanzaPagina = () => {
-      if (page < totalPages) {
-        setPage(page + 1); // Suma 1 para avanzar de página si no estás en la última página
-      }
-    };
-    return (
-      <>
-        <h4 className="text-center font-semibold">
-          {totalRecords !== 0 ? `${page} de ${totalPages}` : ""}
-        </h4>
-        <div className="flex flex-col items-center mb-2">
-          <div className="inline-flex mt-2">
-            {/* Oculta los botones "<<" y "<" si estás en la primera página */}
-            {page > 1 && (
-              <>
-                <button className="btn-page" onClick={primeraPagina}>
-                  {"<<"}
-                </button>
-                <button className="btn-page" onClick={retrocedePagina}>
-                  {"<"}
-                </button>
-              </>
-            )}
-            {pageButtons}
-            {/* Oculta los botones ">>" y ">" si estás en la última página */}
-            {page < totalPages && (
-              <>
-                <button onClick={avanzaPagina} className="btn-page">
-                  {">"}
-                </button>
-                <button onClick={ultimaPagina} className="btn-page">
-                  {">>"}
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      </>
-    );
-  };
-
+  
   const handleOnChange = (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => {
@@ -177,8 +91,7 @@ export default function Page () {
     const cervezas = await fetchCervezasQuery(queryString);
     setCervezas(cervezas.data);
 
-    setTotalPages(cervezas.last_page);
-    setTotalRecords(cervezas.total);
+   
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -202,8 +115,7 @@ export default function Page () {
         const cervezasData = await fetchCervezas();
 
         setCervezas(cervezasData.data);
-        setTotalPages(cervezasData.last_page);
-        setTotalRecords(cervezasData.total);
+       
 
         const tiposData = await fetchTipos();
         setTipos(tiposData.data);
@@ -416,8 +328,8 @@ export default function Page () {
           </form>
         )}
 
-        <p className="text-center font-bold">Resultados : {totalRecords}</p>
-        {totalRecords > limit && <RenderPagination />}
+       
+        
         {loading ? (
           <Load />
         ) : (
