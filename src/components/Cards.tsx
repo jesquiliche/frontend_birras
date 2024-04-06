@@ -78,7 +78,7 @@ const Cards = ({ cervezas, setCervezas, setActualizaPaginas }: Props) => {
               </h3>
               <div className="flex justify-between p-2 mt-2">
                 <Link
-                  href={`/Cervezas/Ver/${cerveza.id}`}
+                  href={`/Ver/${cerveza.id}`}
                   className="btn-primary w-full"
                 >
                   Ver

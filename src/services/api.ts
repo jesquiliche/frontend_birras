@@ -246,7 +246,7 @@ export async function fetchPaises(): Promise<PaisesData | undefined> {
     }
 
     const data = await response.json();
-    console.log(data)
+   
     return data;
     // Aquí puedes trabajar con los datos obtenidos de la API
   } catch (error) {
